@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.models.DTO.ChampiondhipDTO;
 import com.example.demo.models.DTO.FillFootballPlayerDTO;
 import com.example.demo.models.DTO.FootballClubDTO;
 import com.example.demo.models.TransferMarket;
@@ -32,11 +31,13 @@ public class ClientPartApplication {
 
         fillFootballWorld(footballClubs);
 
-        ResponseEntity<String> response2 = restTemplate
-                .exchange(URL + "/playRound", HttpMethod.GET, headersEntity, String.class);
+        ResponseEntity<Void> response2 = restTemplate
+                .exchange(URL + "/playRound", HttpMethod.GET, headersEntity, Void.class);
 
-        System.out.println(response2.getBody());
+        ResponseEntity<String> response3 = restTemplate
+                .exchange(URL + "/results", HttpMethod.GET, headersEntity, String.class);
 
+        System.out.println(response3.getBody());
     }
 
     private static List<FootballClub> createFootballClubs() {
@@ -121,20 +122,5 @@ public class ClientPartApplication {
 
             System.out.println(response1.toString());
         }
-
-        ChampiondhipDTO championdhipDTO = new ChampiondhipDTO();
-        championdhipDTO.setParticipants(footballClubs);
-        championdhipDTO.setScores(new ArrayList<>(footballClubs.size()));
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-        String championshipJson = gson.toJson(championdhipDTO);
-
-        HttpEntity<String> deliverJson = new HttpEntity<>(championshipJson, headers);
-
-        ResponseEntity<Void> response1 = restTemplate
-                .exchange(URL + "/footballWorld/createChampionship", HttpMethod.POST, deliverJson, Void.class);
-
-        System.out.println(response1.toString());
-
     }
 }
